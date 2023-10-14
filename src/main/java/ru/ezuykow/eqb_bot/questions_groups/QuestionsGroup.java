@@ -1,0 +1,25 @@
+package ru.ezuykow.eqb_bot.questions_groups;
+
+import jakarta.persistence.*;
+import ru.ezuykow.eqb_bot.questions.Question;
+
+import java.util.Set;
+import java.util.UUID;
+
+/**
+ * @author ezuykow
+ */
+@Entity
+@Table(name = "questions_group")
+public class QuestionsGroup {
+
+    @Id
+    @Column(name = "id")
+    private UUID id;
+
+    @Column(name = "name")
+    private String name;
+
+    @OneToMany(mappedBy = "questionGroup")
+    private Set<Question> questions;
+}

@@ -4,8 +4,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import ru.ezuykow.eqb_bot.games.Game;
+import ru.ezuykow.eqb_bot.questions_groups.QuestionsGroup;
 
-import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -28,9 +29,9 @@ public class PreparedGame {
     @JoinColumn(name = "game_id")
     private Game game;
 
-    @Column(name = "started_at")
-    private LocalDateTime startedAt;
-
-    @Column(name = "minutes_to_end")
-    private Integer minToEnd;
+    @JoinTable(name = "PREPARED_GAME_QUESTIONS_GROUP_LINK",
+            joinColumns = @JoinColumn(name = "PREPARED_GAME_ID", referencedColumnName = "ID"),
+            inverseJoinColumns = @JoinColumn(name = "QUESTIONS_GROUP_ID", referencedColumnName = "ID"))
+    @ManyToMany
+    private Set<QuestionsGroup> questionGroups;
 }

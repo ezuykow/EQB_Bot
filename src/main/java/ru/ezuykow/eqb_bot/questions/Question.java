@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import ru.ezuykow.eqb_bot.hints.Hint;
+import ru.ezuykow.eqb_bot.questions_groups.QuestionsGroup;
 import ru.ezuykow.eqb_bot.users.User;
 
 import java.util.List;
@@ -27,11 +28,9 @@ public class Question {
     @JoinColumn(name = "author_id")
     private User author;
 
-    @Column(name = "question_group_id")
-    private UUID questionGroupId;
-
-    @Column(name = "order_position")
-    private Integer orderPosition;
+    @ManyToOne
+    @JoinColumn(name = "question_group_id")
+    private QuestionsGroup questionGroup;
 
     @Column(name = "text")
     private String text;

@@ -31,18 +31,16 @@ public class Team {
     @Column(name = "chat_id")
     private long chatId;
 
-    @Column(name = "question_answered")
-    private int questionAnswered;
+    @Column(name = "points")
+    private Integer points;
+
+    @Column(name = "started_at")
+    private LocalDateTime startedAt;
 
     @Column(name = "hints_used")
     private int hintsUsed;
 
-    @Column(name = "place")
-    private int place;
-
     @Column(name = "version")
     private int version;
 
-    @Column(name = "last_question_answered_at")
-    private LocalDateTime lastQuestionAnsweredAt;
 }

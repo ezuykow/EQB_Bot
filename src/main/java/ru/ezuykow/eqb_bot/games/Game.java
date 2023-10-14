@@ -29,14 +29,11 @@ public class Game {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "duration")
-    private int duration;
-
     @Column(name = "questions_count")
     private int questionsCount;
 
-    @Column(name = "max_hints_per_question")
-    private int maxHintsPerQuestion;
+    @Column(name = "attempt_to_answer_count")
+    private Integer attemptToAnswerCount;
 
     @Column(name = "additional_info")
     private String additionalInfo;
