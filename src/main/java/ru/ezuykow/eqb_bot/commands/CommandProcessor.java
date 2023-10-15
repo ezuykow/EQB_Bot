@@ -26,7 +26,7 @@ public class CommandProcessor {
     //region API
 
     public void perform(Update update) {
-        switch (pasrseCommand(update.getMessageText())) {
+        switch (update.getFullCommand().command()) {
             case OWNER -> ownerCommandExecutor.exec(update);
             case REG -> regCommandExecutor.exec(update);
             case START -> startCommandExecutor.exec(update);
@@ -36,12 +36,4 @@ public class CommandProcessor {
     }
 
     //endregion
-
-    private Command pasrseCommand (String message) {
-        try {
-            return Command.valueOf(message.substring(1).toUpperCase());
-        } catch (IllegalArgumentException e) {
-            return Command.UNKNOWN;
-        }
-    }
 }

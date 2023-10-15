@@ -1,6 +1,7 @@
 package ru.ezuykow.eqb_bot.questions_groups;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 import ru.ezuykow.eqb_bot.questions.Question;
 
 import java.util.Set;
@@ -11,6 +12,7 @@ import java.util.UUID;
  */
 @Entity
 @Table(name = "questions_group")
+@Getter
 public class QuestionsGroup {
 
     @Id
@@ -20,6 +22,6 @@ public class QuestionsGroup {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "questionGroup")
+    @OneToMany(mappedBy = "questionGroup", fetch = FetchType.EAGER)
     private Set<Question> questions;
 }

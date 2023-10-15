@@ -38,7 +38,10 @@ public class Team {
     private LocalDateTime startedAt;
 
     @Column(name = "hints_used")
-    private int hintsUsed;
+    private Integer hintsUsed;
+
+    @Column(name = "current_question")
+    private Integer currentQuestionPosition;
 
     @Column(name = "version")
     private int version;

@@ -19,10 +19,6 @@ public class TeamService {
 
     //region API
 
-    public boolean isExistByChatId(Long chatId) {
-        return teamRepository.existsByChatId(chatId);
-    }
-
     public List<Team> findByPreparedGame(PreparedGame preparedGame) {
         return teamRepository.findByPreparedGame(preparedGame);
     }

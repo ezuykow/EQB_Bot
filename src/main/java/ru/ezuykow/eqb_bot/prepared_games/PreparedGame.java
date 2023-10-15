@@ -32,6 +32,6 @@ public class PreparedGame {
     @JoinTable(name = "PREPARED_GAME_QUESTIONS_GROUP_LINK",
             joinColumns = @JoinColumn(name = "PREPARED_GAME_ID", referencedColumnName = "ID"),
             inverseJoinColumns = @JoinColumn(name = "QUESTIONS_GROUP_ID", referencedColumnName = "ID"))
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<QuestionsGroup> questionGroups;
 }

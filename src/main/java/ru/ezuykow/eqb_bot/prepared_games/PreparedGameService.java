@@ -8,11 +8,10 @@ import ru.ezuykow.eqb_bot.messages.MessageService;
 import ru.ezuykow.eqb_bot.teams.Team;
 import ru.ezuykow.eqb_bot.teams.TeamService;
 import ru.ezuykow.eqb_bot.users.UserService;
-import ru.ezuykow.eqb_bot.utils.TeamForPlaceComparator;
 
-import java.util.Comparator;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author ezuykow
@@ -29,46 +28,29 @@ public class PreparedGameService {
 
     //region API
 
-    public List<PreparedGame> findAllStarted() {
-        return preparedGameRepository.findByStartedAtNotNull();
-    }
-
     @Nullable
-    public PreparedGame findFirst() {
-        List<PreparedGame> preparedGames = preparedGameRepository.findAll();
-        if (preparedGames.isEmpty()) {
-            return null;
-        }
-        return preparedGames.get(0);
-    }
-
-    public void save(PreparedGame preparedGame) {
-        preparedGameRepository.save(preparedGame);
-    }
-
-    public void saveAll(List<PreparedGame> games) {
-        preparedGameRepository.saveAll(games);
+    public PreparedGame findByKey(String key) {
+        return preparedGameRepository.findByKey(key);
     }
 
     public void endGame(PreparedGame preparedGame) {
         List<Team> teams = teamService.findByPreparedGame(preparedGame);
+        LocalDateTime stopTime = LocalDateTime.now();
 
         StringBuilder sb = new StringBuilder();
         sb.append("Results:\n\n");
-        AtomicInteger place = new AtomicInteger(1);
-        teams.sort(new TeamForPlaceComparator());
         teams.forEach(t -> {
-            t.setPlace(place.get());
+            long playingMinutes = (t.getStartedAt() != null)
+                    ? ChronoUnit.MINUTES.between(t.getStartedAt(), stopTime)
+                    : 0;
+            String points = messageService.get("points") + " " + t.getPoints() + "\n";
+            String playingTime = messageService.get("playing-time") + " " + playingMinutes;
             messageSender.sendText(t.getChatId(),
-                    messageService.get("game-over") + "\n"
-                            + messageService.get("tasks-completed") + " " + t.getQuestionAnswered() + "\n"
-                            + messageService.get("place") + " " + t.getPlace());
-            sb.append("Place: ").append(place.getAndIncrement()).append(", Team: ").append(t.getName()).append(";\n");
+                    messageService.get("game-over") + "\n" + points + playingTime);
+            sb.append("Team: ").append(t.getName()).append("\n")
+                    .append(points)
+                    .append(playingTime).append(";\n\n");
         });
-
-        preparedGame.setStartedAt(null);
-        preparedGame.setMinToEnd(null);
-        save(preparedGame);
 
         messageSender.sendText(userService.findByUsername("owner").getTelegramUserId(), sb.toString());
 

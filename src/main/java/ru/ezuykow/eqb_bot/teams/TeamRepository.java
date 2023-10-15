@@ -13,8 +13,6 @@ import java.util.UUID;
 @Repository
 public interface TeamRepository extends JpaRepository<Team, UUID> {
 
-    boolean existsByChatId(Long chatId);
-
     List<Team> findByPreparedGame(PreparedGame preparedGame);
 
     Team findByChatId(Long chatId);
