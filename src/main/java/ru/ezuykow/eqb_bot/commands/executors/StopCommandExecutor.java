@@ -26,6 +26,9 @@ public class StopCommandExecutor implements CommandExecutor{
         }
 
         String[] args = update.getFullCommand().args();
+        if (args == null) {
+            return;
+        }
         PreparedGame preparedGame = preparedGameService.findByKey(args[0]);
         if (validator.isPreparedGameNotExist(preparedGame, update)) {
             return;

@@ -67,13 +67,19 @@ public class StartCommandExecutor implements CommandExecutor{
         List<QuestionForTeam> questions =  questionForTeamService.findAllByTeam(team);
         questions.sort(Comparator.comparing(QuestionForTeam::getOrderPosition, Comparator.nullsLast(Comparator.naturalOrder())));
 
-        for (int pointer = 0; pointer < gameQuestionsCount; pointer++) {
-            Integer orderPosition = questions.get(pointer).getOrderPosition();
-            if (orderPosition == null || orderPosition != pointer + 1) {
-                messageSender.sendMessage(team.getChatId(), "questions-not-prepared");
-                return false;
+        try {
+            for (int pointer = 0; pointer < gameQuestionsCount; pointer++) {
+                Integer orderPosition = questions.get(pointer).getOrderPosition();
+                if (orderPosition == null || orderPosition != pointer + 1) {
+                    messageSender.sendMessage(team.getChatId(), "questions-not-prepared");
+                    return false;
+                }
             }
+        } catch (IndexOutOfBoundsException e) {
+            messageSender.sendMessage(team.getChatId(), "questions-not-prepared");
+            return false;
         }
+
 
         questionForTeamService.deleteAll(questions.subList(gameQuestionsCount, questions.size()));
         return true;
